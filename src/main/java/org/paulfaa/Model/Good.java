@@ -4,17 +4,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
 public class Good {
     private String name;
     private int quantity;
-    private double value;
+    private BigDecimal value;
     private GoodType type;
     private boolean isImported;
 
-    public Good(String name, int quantity, double value, GoodType type, boolean isImported) {
+    public Good(String name, int quantity, BigDecimal value, GoodType type, boolean isImported) {
         this.name = name;
         this.quantity = quantity;
         this.value = value;
@@ -22,7 +24,7 @@ public class Good {
         this.isImported = isImported;
     }
 
-    public double getTotalValue(){
-        return this.quantity * this.value;
+    public BigDecimal getTotalValue(){
+        return BigDecimal.valueOf(this.quantity).multiply(this.value);
     }
 }
