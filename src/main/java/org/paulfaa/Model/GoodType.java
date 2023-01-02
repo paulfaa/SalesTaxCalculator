@@ -1,6 +1,6 @@
 package org.paulfaa.Model;
 
-enum GoodType {
+public enum GoodType {
     BOOK,
     FOOD,
     MEDICAL,
