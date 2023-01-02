@@ -32,7 +32,16 @@ public class CalculateService {
         return roundUp(goodValue.multiply(IMPORT_TAX_RATE));
     }
 
-    //public void calculateCost(Good[] basket){
-        //todo
-    //}
+    public void calculateBasketCost(Good[] basket){
+        BigDecimal overallCost = BigDecimal.ZERO;
+        BigDecimal overallTax = BigDecimal.ZERO;
+        for (Good good : basket) {
+            BigDecimal costIncludingTax = calculateCost(good);
+            overallCost = overallCost.add(costIncludingTax);
+            overallTax = overallTax.add(costIncludingTax.subtract(good.getTotalValue()));
+            System.out.println(good.getQuantity() + " " + good.getName() + " at " + costIncludingTax);
+        }
+        System.out.println("Sales Taxes: " + overallTax);
+        System.out.println("Total: " + overallCost);
+    }
 }
