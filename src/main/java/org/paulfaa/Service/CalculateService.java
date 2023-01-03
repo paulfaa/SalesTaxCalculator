@@ -12,7 +12,7 @@ public class CalculateService {
     final static BigDecimal IMPORT_TAX_RATE = new BigDecimal("0.05");
 
     public BigDecimal calculateCost(Good good){
-        BigDecimal goodValue = good.getTotalValue();
+        BigDecimal goodValue = good.getNetValue();
         BigDecimal salesTax = BigDecimal.ZERO;
         BigDecimal importTax = BigDecimal.ZERO;
         if (good.getType() == GoodType.OTHER){
@@ -30,7 +30,7 @@ public class CalculateService {
         for (Good good : basket) {
             BigDecimal costIncludingTax = calculateCost(good);
             overallCost = overallCost.add(costIncludingTax);
-            overallTax = overallTax.add(costIncludingTax.subtract(good.getTotalValue()));
+            overallTax = overallTax.add(costIncludingTax.subtract(good.getNetValue()));
             System.out.println(good.getQuantity() + " " + good.getName() + " at " + costIncludingTax);
         }
         System.out.println("Sales Taxes: " + overallTax);
