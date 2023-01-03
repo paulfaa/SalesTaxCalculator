@@ -33,7 +33,7 @@ public class CalculateServiceTest {
         Good good = Good.builder()
                 .name("Book")
                 .quantity(1)
-                .value(BigDecimal.valueOf(12.49))
+                .value(new BigDecimal("12.49"))
                 .type(GoodType.BOOK)
                 .isImported(false)
                 .build();
@@ -51,7 +51,7 @@ public class CalculateServiceTest {
         Good good = Good.builder()
                 .name("Music CD")
                 .quantity(1)
-                .value(BigDecimal.valueOf(14.99))
+                .value(new BigDecimal("14.99"))
                 .type(GoodType.OTHER)
                 .isImported(false)
                 .build();
@@ -69,7 +69,7 @@ public class CalculateServiceTest {
         Good good = Good.builder()
                 .name("Box of chocolates")
                 .quantity(1)
-                .value(BigDecimal.valueOf(10.00))
+                .value(new BigDecimal("10.00"))
                 .type(GoodType.FOOD)
                 .isImported(true)
                 .build();
@@ -87,7 +87,7 @@ public class CalculateServiceTest {
         Good good = Good.builder()
                 .name("Bottle of perfume")
                 .quantity(1)
-                .value(BigDecimal.valueOf(47.50))
+                .value(new BigDecimal("47.50"))
                 .type(GoodType.OTHER)
                 .isImported(true)
                 .build();

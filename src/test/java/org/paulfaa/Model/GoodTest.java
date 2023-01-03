@@ -14,7 +14,7 @@ public class GoodTest {
         good = Good.builder()
                 .name("Hat")
                 .quantity(1)
-                .value(BigDecimal.valueOf(12.95))
+                .value(new BigDecimal("12.95"))
                 .type(GoodType.OTHER)
                 .isImported(false)
                 .build();
@@ -23,7 +23,7 @@ public class GoodTest {
         BigDecimal result = good.getTotalValue();
 
         //assert
-        assertEquals(BigDecimal.valueOf(12.95), result);
+        assertEquals(new BigDecimal("12.95"), result);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class GoodTest {
         good = Good.builder()
                 .name("Shoe")
                 .quantity(4)
-                .value(BigDecimal.valueOf(30.50))
+                .value(new BigDecimal("30.50"))
                 .type(GoodType.OTHER)
                 .isImported(false)
                 .build();
@@ -41,6 +41,6 @@ public class GoodTest {
         BigDecimal result = good.getTotalValue();
 
         //assert
-        assertEquals(BigDecimal.valueOf(122.00), result);
+        assertEquals(new BigDecimal("122.00"), result);
     }
 }

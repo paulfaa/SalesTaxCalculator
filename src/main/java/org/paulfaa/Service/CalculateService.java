@@ -24,14 +24,6 @@ public class CalculateService {
         return goodValue.add(salesTax).add(importTax);
     }
 
-    private BigDecimal calculateSalesTax(BigDecimal goodValue){
-        return roundUp(goodValue.multiply(SALES_TAX_RATE));
-    }
-
-    private BigDecimal calculateImportTax(BigDecimal goodValue){
-        return roundUp(goodValue.multiply(IMPORT_TAX_RATE));
-    }
-
     public void calculateBasketCost(Good[] basket){
         BigDecimal overallCost = BigDecimal.ZERO;
         BigDecimal overallTax = BigDecimal.ZERO;
@@ -43,5 +35,13 @@ public class CalculateService {
         }
         System.out.println("Sales Taxes: " + overallTax);
         System.out.println("Total: " + overallCost);
+    }
+
+    private BigDecimal calculateSalesTax(BigDecimal goodValue){
+        return roundUp(goodValue.multiply(SALES_TAX_RATE));
+    }
+
+    private BigDecimal calculateImportTax(BigDecimal goodValue){
+        return roundUp(goodValue.multiply(IMPORT_TAX_RATE));
     }
 }

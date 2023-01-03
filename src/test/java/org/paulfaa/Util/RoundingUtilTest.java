@@ -1,7 +1,6 @@
 package org.paulfaa.Util;
 
 import org.junit.Test;
-
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
@@ -12,10 +11,10 @@ public class RoundingUtilTest {
     @Test
     public void testRoundUp(){
         //act
-        BigDecimal result = roundUp(BigDecimal.valueOf(54.625));
+        BigDecimal result = roundUp(new BigDecimal("54.625"));
 
         //assert
-        assertEquals(BigDecimal.valueOf(54.65), result);
+        assertEquals(new BigDecimal("54.65"), result);
 
     }
 
