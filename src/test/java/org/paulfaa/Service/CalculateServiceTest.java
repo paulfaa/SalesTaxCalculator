@@ -1,12 +1,11 @@
 package org.paulfaa.Service;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.paulfaa.Model.Good;
 import org.paulfaa.Model.GoodType;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import org.paulfaa.Model.Receipt;
+import org.paulfaa.Model.Tax;
+
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
@@ -14,21 +13,9 @@ import static org.junit.Assert.assertEquals;
 public class CalculateServiceTest {
 
     public CalculateService classUnderTest = new CalculateService();
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-    @Before
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-    }
-
-    @After
-    public void restoreStreams() {
-        System.setOut(originalOut);
-    }
 
     @Test
-    public void testCalculateCostNonImport(){
+    public void testCalculateTax(){
         //Arrange
         Good good = Good.builder()
                 .name("Book")
@@ -36,17 +23,20 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("12.49"))
                 .type(GoodType.BOOK)
                 .isImported(false)
+                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        BigDecimal result = classUnderTest.calculateCost(good);
+        assertEquals(new BigDecimal("0").compareTo(good.getTax().getTotalTax()), 0);
+        classUnderTest.calculateTax(good);
 
         //Assert
-        assertEquals(BigDecimal.valueOf(12.49).compareTo(result), 0);
+        assertEquals(new BigDecimal("12.49").compareTo(good.getNetValue()), 0);
+        assertEquals(BigDecimal.ZERO.compareTo(good.getTax().getTotalTax()), 0);
     }
 
     @Test
-    public void testCalculateCostNonImportOther(){
+    public void testCalculateTaxNonImportOther(){
         //Arrange
         Good good = Good.builder()
                 .name("Music CD")
@@ -54,17 +44,21 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("14.99"))
                 .type(GoodType.OTHER)
                 .isImported(false)
+                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        BigDecimal result = classUnderTest.calculateCost(good);
+        assertEquals(new BigDecimal("0").compareTo(good.getTax().getTotalTax()), 0);
+        classUnderTest.calculateTax(good);
 
         //Assert
-        assertEquals(BigDecimal.valueOf(16.49).compareTo(result), 0);
+        System.out.println("net value: " + good.getNetValue());
+        assertEquals(new BigDecimal("16.49").compareTo(good.getGrossValue()), 0);
+        assertEquals(new BigDecimal("1.50").compareTo(good.getTax().getTotalTax()), 0);
     }
 
     @Test
-    public void testCalculateCostImport(){
+    public void testCalculateTaxImport(){
         //Arrange
         Good good = Good.builder()
                 .name("Box of chocolates")
@@ -72,17 +66,20 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("10.00"))
                 .type(GoodType.FOOD)
                 .isImported(true)
+                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        BigDecimal result = classUnderTest.calculateCost(good);
+        assertEquals(BigDecimal.ZERO.compareTo(good.getTax().getTotalTax()), 0);
+        classUnderTest.calculateTax(good);
 
         //Assert
-        assertEquals(BigDecimal.valueOf(10.50).compareTo(result), 0);
+        assertEquals(new BigDecimal("0.50").compareTo(good.getTax().getTotalTax()), 0);
+        assertEquals(new BigDecimal("10.50").compareTo(good.getGrossValue()), 0);
     }
 
     @Test
-    public void testCalculateCostImportOther(){
+    public void testCalculateTaxImportOther(){
         //Arrange
         Good good = Good.builder()
                 .name("Bottle of perfume")
@@ -90,55 +87,45 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("47.50"))
                 .type(GoodType.OTHER)
                 .isImported(true)
+                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        BigDecimal result = classUnderTest.calculateCost(good);
+        assertEquals(BigDecimal.ZERO.compareTo(good.getTax().getTotalTax()), 0);
+        classUnderTest.calculateTax(good);
 
         //Assert
-        assertEquals(BigDecimal.valueOf(54.65).compareTo(result), 0);
+        assertEquals(new BigDecimal("7.15").compareTo(good.getTax().getTotalTax()), 0);
+        assertEquals(new BigDecimal("54.65").compareTo(good.getGrossValue()), 0);
     }
 
     @Test
-    public void testCalculateBasketCost(){
+    public void testGenerateReceipt(){
         //arrange
-        String expectedReponse =
-                """
-                1 Book at 12.49\r
-                1 Music CD at 16.49\r
-                1 Chocolate Bar at 0.85\r
-                Sales Taxes: 1.50\r
-                Total: 29.83\r
-                """;
-
         Good[] basket = new Good[]{
                 Good.builder()
-                        .name("Book")
+                        .name("box of chocolates")
                         .quantity(1)
-                        .value(new BigDecimal("12.49"))
-                        .type(GoodType.BOOK)
-                        .isImported(false)
-                        .build(),
-                Good.builder()
-                        .name("Music CD")
-                        .quantity(1)
-                        .value(new BigDecimal("14.99"))
-                        .type(GoodType.OTHER)
-                        .isImported(false)
-                        .build(),
-                Good.builder()
-                        .name("Chocolate Bar")
-                        .quantity(1)
-                        .value(new BigDecimal("0.85"))
+                        .value(new BigDecimal("10.00"))
                         .type(GoodType.FOOD)
-                        .isImported(false)
+                        .isImported(true)
+                        .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
+                        .build(),
+                Good.builder()
+                        .name("bottle of perfume")
+                        .quantity(1)
+                        .value(new BigDecimal("47.50"))
+                        .type(GoodType.OTHER)
+                        .isImported(true)
+                        .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                         .build()
         };
+        Receipt expectedReceipt = new Receipt(basket, new BigDecimal("7.65"), new BigDecimal("65.15"));
 
         //act
-        classUnderTest.calculateBasketCost(basket);
+        Receipt actualReceipt = classUnderTest.generateReceipt(basket);
 
         //assert
-        assertEquals(expectedReponse, outContent.toString());
+        assertEquals(expectedReceipt, actualReceipt);
     }
 }

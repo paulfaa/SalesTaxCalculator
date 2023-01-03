@@ -2,6 +2,7 @@ package org.paulfaa.Service;
 
 import org.paulfaa.Model.Good;
 import org.paulfaa.Model.GoodType;
+import org.paulfaa.Model.Receipt;
 import java.math.BigDecimal;
 
 import static org.paulfaa.Util.RoundingUtil.roundUp;
@@ -11,7 +12,7 @@ public class CalculateService {
     final static BigDecimal SALES_TAX_RATE = new BigDecimal("0.10");
     final static BigDecimal IMPORT_TAX_RATE = new BigDecimal("0.05");
 
-    public BigDecimal calculateCost(Good good){
+    public void calculateTax(Good good){
         BigDecimal goodValue = good.getNetValue();
         BigDecimal salesTax = BigDecimal.ZERO;
         BigDecimal importTax = BigDecimal.ZERO;
@@ -21,20 +22,20 @@ public class CalculateService {
         if (good.isImported()){
             importTax = calculateImportTax(goodValue);
         }
-        return goodValue.add(salesTax).add(importTax);
+        good.getTax().setSalesTax(salesTax);
+        good.getTax().setImportTax(importTax);
     }
 
-    public void calculateBasketCost(Good[] basket){
-        BigDecimal overallCost = BigDecimal.ZERO;
-        BigDecimal overallTax = BigDecimal.ZERO;
+    public Receipt generateReceipt(Good[] basket){
+        BigDecimal totalCost = BigDecimal.ZERO;
+        BigDecimal salesTax = BigDecimal.ZERO;
         for (Good good : basket) {
-            BigDecimal costIncludingTax = calculateCost(good);
-            overallCost = overallCost.add(costIncludingTax);
-            overallTax = overallTax.add(costIncludingTax.subtract(good.getNetValue()));
-            System.out.println(good.getQuantity() + " " + good.getName() + " at " + costIncludingTax);
+            calculateTax(good);
+            BigDecimal goodCostIncludingTax = good.getGrossValue();
+            totalCost = totalCost.add(goodCostIncludingTax);
+            salesTax = salesTax.add(good.getTax().getTotalTax());
         }
-        System.out.println("Sales Taxes: " + overallTax);
-        System.out.println("Total: " + overallCost);
+        return new Receipt(basket, salesTax, totalCost);
     }
 
     private BigDecimal calculateSalesTax(BigDecimal goodValue){
