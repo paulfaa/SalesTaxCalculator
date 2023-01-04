@@ -2,7 +2,6 @@ package org.paulfaa;
 
 import org.paulfaa.Model.Good;
 import org.paulfaa.Model.GoodType;
-import org.paulfaa.Model.Tax;
 import org.paulfaa.Service.CalculateService;
 import java.math.BigDecimal;
 
@@ -20,7 +19,6 @@ public class Main {
                         .value(new BigDecimal("12.49"))
                         .type(GoodType.BOOK)
                         .isImported(false)
-                        .tax(new Tax(null, null))
                         .build(),
                 Good.builder()
                         .name("Music CD")
@@ -28,7 +26,6 @@ public class Main {
                         .value(new BigDecimal("14.99"))
                         .type(GoodType.OTHER)
                         .isImported(false)
-                        .tax(new Tax(null, null))
                         .build(),
                 Good.builder()
                         .name("Chocolate Bar")
@@ -36,7 +33,6 @@ public class Main {
                         .value(new BigDecimal("0.85"))
                         .type(GoodType.FOOD)
                         .isImported(false)
-                        .tax(new Tax(null, null))
                         .build()
         };
         Good[] input2 = new Good[]{
@@ -46,7 +42,6 @@ public class Main {
                         .value(new BigDecimal("10.00"))
                         .type(GoodType.FOOD)
                         .isImported(true)
-                        .tax(new Tax(null, null))
                         .build(),
                 Good.builder()
                         .name("Bottle of perfume")
@@ -54,7 +49,6 @@ public class Main {
                         .value(new BigDecimal("47.50"))
                         .type(GoodType.OTHER)
                         .isImported(true)
-                        .tax(new Tax(null, null))
                         .build()
         };
         Good[] input3 = new Good[]{
@@ -64,7 +58,6 @@ public class Main {
                         .value(new BigDecimal("27.99"))
                         .type(GoodType.OTHER)
                         .isImported(true)
-                        .tax(new Tax(null, null))
                         .build(),
                 Good.builder()
                         .name("Bottle of perfume")
@@ -72,7 +65,6 @@ public class Main {
                         .value(new BigDecimal("18.99"))
                         .type(GoodType.OTHER)
                         .isImported(false)
-                        .tax(new Tax(null, null))
                         .build(),
                 Good.builder()
                         .name("Packet of headache pills")
@@ -80,7 +72,6 @@ public class Main {
                         .value(new BigDecimal("9.75"))
                         .type(GoodType.MEDICAL)
                         .isImported(false)
-                        .tax(new Tax(null, null))
                         .build(),
                 Good.builder()
                         .name("Box of chocolates")
@@ -88,7 +79,6 @@ public class Main {
                         .value(new BigDecimal("11.25"))
                         .type(GoodType.FOOD)
                         .isImported(true)
-                        .tax(new Tax(null, null))
                         .build()
         };
         Good[][] baskets = new Good[][]{

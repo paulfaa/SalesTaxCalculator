@@ -8,7 +8,7 @@ import org.paulfaa.Model.Tax;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class CalculateServiceTest {
 
@@ -23,14 +23,14 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("12.49"))
                 .type(GoodType.BOOK)
                 .isImported(false)
-                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        assertEquals(new BigDecimal("0").compareTo(good.getTax().getTotalTax()), 0);
+        assertNull(good.getTax());
         classUnderTest.calculateTax(good);
 
         //Assert
+        assertNotNull(good.getTax());
         assertEquals(new BigDecimal("12.49").compareTo(good.getNetValue()), 0);
         assertEquals(BigDecimal.ZERO.compareTo(good.getTax().getTotalTax()), 0);
     }
@@ -44,11 +44,10 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("14.99"))
                 .type(GoodType.OTHER)
                 .isImported(false)
-                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        assertEquals(new BigDecimal("0").compareTo(good.getTax().getTotalTax()), 0);
+        assertNull(good.getTax());
         classUnderTest.calculateTax(good);
 
         //Assert
@@ -66,11 +65,10 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("10.00"))
                 .type(GoodType.FOOD)
                 .isImported(true)
-                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        assertEquals(BigDecimal.ZERO.compareTo(good.getTax().getTotalTax()), 0);
+        assertNull(good.getTax());
         classUnderTest.calculateTax(good);
 
         //Assert
@@ -87,11 +85,10 @@ public class CalculateServiceTest {
                 .value(new BigDecimal("47.50"))
                 .type(GoodType.OTHER)
                 .isImported(true)
-                .tax(new Tax(BigDecimal.ZERO, BigDecimal.ZERO))
                 .build();
 
         //Act
-        assertEquals(BigDecimal.ZERO.compareTo(good.getTax().getTotalTax()), 0);
+        assertNull(good.getTax());
         classUnderTest.calculateTax(good);
 
         //Assert

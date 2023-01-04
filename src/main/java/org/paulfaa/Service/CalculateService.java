@@ -3,6 +3,8 @@ package org.paulfaa.Service;
 import org.paulfaa.Model.Good;
 import org.paulfaa.Model.GoodType;
 import org.paulfaa.Model.Receipt;
+import org.paulfaa.Model.Tax;
+
 import java.math.BigDecimal;
 
 import static org.paulfaa.Util.RoundingUtil.roundUp;
@@ -22,8 +24,7 @@ public class CalculateService {
         if (good.isImported()){
             importTax = calculateImportTax(goodValue);
         }
-        good.getTax().setSalesTax(salesTax);
-        good.getTax().setImportTax(importTax);
+        good.setTax(new Tax(salesTax, importTax));
     }
 
     public Receipt generateReceipt(Good[] basket){
